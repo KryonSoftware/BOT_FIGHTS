@@ -137,7 +137,7 @@ public class GameEngine {
 			
 			public boolean isBulletHerePJ1() {
 					
-					return shotPJ1.isBulletHere();
+				return shotPJ1.isBulletHere();
 				
 			}
 			
@@ -629,10 +629,30 @@ public class GameEngine {
 						combatMapScreen[x][y]="\033[1;47m\033[1;35m + \033[0m";
 					}
 					if(combatMapSlot[x][y].isPJ1Here()==true) {
+						
+						if(isPJ1Stunned()==true) {
+							
+							combatMapScreen[x][y]="\033[1;44m???\033[0m";
+							
+						}
+						else {
+							
 						combatMapScreen[x][y]="\033[1;44mIA1\033[0m";
+						
+						}
 					}
 					if(combatMapSlot[x][y].isPJ2Here()==true) {
-						combatMapScreen[x][y]="\033[1;45mIA2\033[0m";
+						
+						if(isPJ1Stunned()==true) {
+							
+							combatMapScreen[x][y]="\033[1;45m???\033[0m";
+							
+						}
+						else {
+							
+							combatMapScreen[x][y]="\033[1;45mIA2\033[0m";
+						
+						}
 					}
 					if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
 						combatMapScreen[x][y]="\033[1;44m-2-\033[0m";
@@ -836,6 +856,8 @@ public class GameEngine {
 				int respawnx=(int)(Math.random() * 50);
 				int respawny=(int)(Math.random() * 50);
 				
+				combatMapSlot[x][y].removePJ(1);
+				
 				if(!(respawnx==x) || !(respawny==y)) {
 				
 				if (combatMapSlot[respawnx][respawny].isBushTF()==false && combatMapSlot[respawnx][respawny].isTreeTF()==false && combatMapSlot[respawnx][respawny].isHoleTF()==false && combatMapSlot[respawnx][respawny].isFlagP1TF()==false && combatMapSlot[respawnx][respawny].isPJ2Here()==false) {
@@ -866,6 +888,8 @@ public class GameEngine {
 			
 				int respawnx=(int)(Math.random() * 50);
 				int respawny=(int)(Math.random() * 50);
+				
+				combatMapSlot[x][y].removePJ(2);
 			
 				if(!(respawnx==x) || !(respawny==y)) {
 			
@@ -967,6 +991,11 @@ public class GameEngine {
 					
 					combatMapSlot[x][y].setFlagP2TF(true);
 					combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
+					
+				}
+				if(combatMapSlot[x][y].isHoleTF()==true) {
+					
+					combatMapScreen[x][y]="\033[40m   \033[0m";
 					
 				}
 				
@@ -1350,7 +1379,7 @@ public class GameEngine {
 				
 				updateShots(x,y);
 				
-				updateMovements(x,y);
+				//updateMovements(x,y);
 				
 				generateColorMap(x,y);
 				
@@ -1423,7 +1452,7 @@ public class GameEngine {
 					case '8':
 						
 						combatMapSlot[x][y-1].moveBullet(1,'N');
-						combatMapSlot[x][y-1].updateBulletStatus(1, false);
+						combatMapSlot[x][y-1].updateBulletStatus(1, true);//*********************
 			
 						break;
 			
@@ -1494,6 +1523,8 @@ public class GameEngine {
 						;
 					}
 				}
+				
+				updateMovements(x,y);
 			}
 		}
 		turn++;

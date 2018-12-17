@@ -269,11 +269,11 @@ public class UserInterface {
 				input.next();//COMPRPBAR SI ESTO HA ARREGLADO EL PROBLEMAAAAAA***************************************************
 					keepPlaying=input.nextLine().toUpperCase();
 					System.out.println(keepPlaying);
-					if(keepPlaying=="Y") {
+					if(keepPlaying.equals("Y") ){
 							exit=false;
 							retry=false;
 						}
-					if(keepPlaying=="N") {
+					if(keepPlaying.equals("N")) {
 							
 							System.out.println("\nSee you soon!\n" + 
 									"                                                                                                                                                                                       \n" + 
@@ -306,7 +306,7 @@ public class UserInterface {
 							exit=true;
 							retry=false;
 					}
-					else {
+					if(!(keepPlaying.equals("N")) && !(keepPlaying.equals("Y"))) {
 						System.out.println("Introduce only <<Y>> or <<N>>");
 						System.out.println(keepPlaying);
 						exit=false;
