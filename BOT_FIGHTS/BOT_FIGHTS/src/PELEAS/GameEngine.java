@@ -23,7 +23,7 @@ public class GameEngine {
 	private boolean player1StartingPos=true;
 	private boolean player2StartingPos=true;
 	private String BOT1Name, BOT2Name;
-	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false, PJ1JustRespawned=false, PJ2JustRespawned=false, PJ1JustStunned=false, PJ2JustStunned=false;
+	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false, PJ1JustRespawned=false, PJ2JustRespawned=false, PJ1JustStunned=false, PJ2JustStunned=false, PJ1Shooted=false, PJ2Shooted=false;
 	
 	//888888888888888888888888888888888888888888888888888888888888888888888888kkkkkkkkk
 	
@@ -632,7 +632,7 @@ public class GameEngine {
 						
 						if(isPJ1Stunned()==true) {
 							
-							combatMapScreen[x][y]="\033[1;44m???\033[0m";
+							combatMapScreen[x][y]="\033[1;44m!!!\033[0m";
 							
 						}
 						else {
@@ -643,9 +643,9 @@ public class GameEngine {
 					}
 					if(combatMapSlot[x][y].isPJ2Here()==true) {
 						
-						if(isPJ1Stunned()==true) {
+						if(isPJ2Stunned()==true) {
 							
-							combatMapScreen[x][y]="\033[1;45m???\033[0m";
+							combatMapScreen[x][y]="\033[1;45m!!!\033[0m";
 							
 						}
 						else {
@@ -742,6 +742,7 @@ public class GameEngine {
 					
 			catch(ArrayIndexOutOfBoundsException e) {
 						
+				combatMapScreen[x][y]="\033[1;47m   \033[0m";
 				combatMapSlot[x][y].removeBullet(1);
 						
 			}
@@ -809,6 +810,7 @@ public class GameEngine {
 					
 			catch(ArrayIndexOutOfBoundsException e) {
 						
+				combatMapScreen[x][y]="\033[1;47m   \033[0m";
 				combatMapSlot[x][y].removeBullet(2);
 						
 			}
@@ -1174,7 +1176,7 @@ public class GameEngine {
 					
 					default:
 						
-						combatMapSlot[x][y].movePJ(1,'P');
+						combatMapSlot[x][y].movePJ(1,'.');
 						combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
 						
 				}
@@ -1182,8 +1184,8 @@ public class GameEngine {
 					
 			catch(ArrayIndexOutOfBoundsException e) {
 						
-				combatMapSlot[x][y].movePJ(1,'P');
-				combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+				combatMapSlot[x][y].movePJ(1,'.');
+				combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
 						
 			}
 					
@@ -1408,6 +1410,16 @@ public class GameEngine {
 					winner=BOT2Name;
 					gameEnded=true;
 				}
+				if(combatMapSlot[j][r].isPJ1Here()==true && combatMapSlot[j][r].isBulletHerePJ2()==true) {
+					
+					PJ1Shooted=true;
+					
+				}
+				if(combatMapSlot[j][r].isPJ2Here()==true && combatMapSlot[j][r].isBulletHerePJ1()==true) {
+					
+					PJ2Shooted=true;
+					
+				}
 				if(combatMapSlot[j][r].isPJ1Here()==true && combatMapSlot[j][r].isRedZone()==true) {
 			
 					PJ1Red=true;
@@ -1416,6 +1428,24 @@ public class GameEngine {
 				if(combatMapSlot[j][r].isPJ2Here()==true && combatMapSlot[j][r].isRedZone()==true) {
 					
 					PJ2Red=true;
+					
+				}
+				if(PJ1Shooted==true && PJ2Shooted==true) {
+					
+					winner="BOTH AI WERE SHOOTED. NO ONE";
+					gameEnded=true;
+					
+				}
+				if(PJ1Shooted==true && PJ2Shooted==false) {
+					
+					winner=BOT2Name;
+					gameEnded=true;
+					
+				}
+				if(PJ1Shooted==false && PJ2Shooted==true) {
+					
+					winner=BOT1Name;
+					gameEnded=true;
 					
 				}
 				if(PJ1Red==true && PJ2Red==true) {
@@ -1452,7 +1482,7 @@ public class GameEngine {
 					case '8':
 						
 						combatMapSlot[x][y-1].moveBullet(1,'N');
-						combatMapSlot[x][y-1].updateBulletStatus(1, true);//*********************
+						combatMapSlot[x][y-1].updateBulletStatus(1, false);//*********************
 			
 						break;
 			
