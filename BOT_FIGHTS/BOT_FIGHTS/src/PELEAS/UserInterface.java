@@ -181,8 +181,6 @@ public class UserInterface {
 	
 	public void PlayersDecissions(GameEngine takeDecission) {
 		
-		if(takeDecission.isPJ1Stunned()==false) {
-		
 		switch(P1Selection) {
 		
 			case 1:
@@ -202,10 +200,6 @@ public class UserInterface {
 		
 		}
 		
-		}
-		
-		if(takeDecission.isPJ2Stunned()==false) {
-		
 		switch(P2Selection) {
 		
 			case 1:
@@ -224,16 +218,6 @@ public class UserInterface {
 				System.out.println("Huge error happened on MENU method in FIGHT class");
 		}
 		
-		}
-		
-		if(takeDecission.isPJ1Stunned()==true) {
-			P1Dec='Z';
-			takeDecission.setPJ1Stunned(false);
-		}
-		if(takeDecission.isPJ2Stunned()==true) {
-			P2Dec='Z';
-			takeDecission.setPJ2Stunned(false);
-		}
 		
 	}
 	
@@ -255,21 +239,22 @@ public class UserInterface {
 		
 		while(FightMap.isGameEnded()==false) {//////está aquí el problema del loop?**********************************************************
 			
-			Thread.sleep(100);
-			FightMap.updateMap();
-			Thread.sleep(100);
-			FightMap.updateMap();
-			Thread.sleep(100);
-			FightMap.updateMap();
-			Thread.sleep(100);
-			FightMap.updateMap();
-			Thread.sleep(100);
+			
 			PlayersActions(FightMap);
 			if(turnCounter>119) {
 				if(turnCounter%10==0) {
 					FightMap.redZone();
 				}
 			}
+			Thread.sleep(100);
+			FightMap.updateMap();
+			Thread.sleep(100);
+			FightMap.updateMap();
+			Thread.sleep(100);
+			FightMap.updateMap();
+			Thread.sleep(100);
+			FightMap.updateMap();
+			Thread.sleep(100);
 			FightMap.updateMap();
 			turnCounter++;
 			
@@ -284,12 +269,11 @@ public class UserInterface {
 				input.next();//COMPRPBAR SI ESTO HA ARREGLADO EL PROBLEMAAAAAA***************************************************
 					keepPlaying=input.nextLine().toUpperCase();
 					System.out.println(keepPlaying);
-					if(keepPlaying=="Y" || keepPlaying== "N") {
-						if(keepPlaying=="Y") {
-							exit=true;
+					if(keepPlaying=="Y") {
+							exit=false;
 							retry=false;
 						}
-						else {
+					if(keepPlaying=="N") {
 							
 							System.out.println("\nSee you soon!\n" + 
 									"                                                                                                                                                                                       \n" + 
@@ -319,9 +303,8 @@ public class UserInterface {
 									"                                                                                                                                                                                       \n" + 
 									"\nKryonSoftwares");
 							Thread.sleep(1000);
-							exit=false;
+							exit=true;
 							retry=false;
-						}
 					}
 					else {
 						System.out.println("Introduce only <<Y>> or <<N>>");

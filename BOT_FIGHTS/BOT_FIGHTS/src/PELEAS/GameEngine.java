@@ -3,7 +3,7 @@ package PELEAS;
 /*---------------------------------------------------------------------------Hecho por KRYON------------------------------------------------------------------------------*/
 
 
-/*ARREGLAR COLISIONES ENTIDADES. ARREGLAR IMPRIMACIONES TANTO DE BALAS COMO DE ENTIDADES CUANDO SE MUEVAN EN CONTRA DEL SENTIDO DE UPDATEMAP. OJO COLISIONES BALAS TAMBIÉN*/
+/*OJO COLISIONES BALAS TAMBIÉN*/
 
 
 //Creamos objeto que generará el mapa
@@ -23,7 +23,7 @@ public class GameEngine {
 	private boolean player1StartingPos=true;
 	private boolean player2StartingPos=true;
 	private String BOT1Name, BOT2Name;
-	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false;
+	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false, PJ1JustRespawned=false, PJ2JustRespawned=false, PJ1JustStunned=false, PJ2JustStunned=false;
 	
 	//888888888888888888888888888888888888888888888888888888888888888888888888kkkkkkkkk
 	
@@ -135,6 +135,42 @@ public class GameEngine {
 			
 			//Métodos para modificar los subobjetos de slot desde GameEngine*********************************************************************!!!!!!!!!!!!!!!!!!
 			
+			public boolean isBulletHerePJ1() {
+					
+					return shotPJ1.isBulletHere();
+				
+			}
+			
+			public boolean isBulletHerePJ2() {
+				
+				return shotPJ2.isBulletHere();
+			
+			}
+			
+			public char getBulletDirPJ1() {
+				
+				return shotPJ1.getBulletDir();
+				
+			}
+			
+			public char getBulletDirPJ2() {
+				
+				return shotPJ2.getBulletDir();
+				
+			}
+			
+			public boolean isBulletUpdatedPJ1() {
+				
+				return shotPJ1.isJustUpdated();
+				
+			}
+			
+			public boolean isBulletUpdatedPJ2() {
+				
+				return shotPJ2.isJustUpdated();
+				
+			}
+			
 			public void moveBullet(int who, char D) {
 				
 				switch (who) {
@@ -188,6 +224,122 @@ public class GameEngine {
 			}
 				
 			}
+			
+			//*****************************************************************************************************
+			
+		public boolean isPJ1Here() {
+			
+			return player1.isPlayerHere();
+			
+		}
+		
+		public boolean isPJ2Here() {
+			
+			return player2.isPlayerHere();
+		
+		}
+		
+		public char getPJ1Dir() {
+			
+			return player1.getPlayerDir();
+			
+		}
+		
+		public char getPJ2Dir() {
+			
+			return player2.getPlayerDir();
+			
+		}
+		
+		public boolean isPJ1Updated() {
+			
+			return player1.isJustUpdated();
+			
+		}
+		
+		public boolean isPJ2Updated() {
+			
+			return player2.isJustUpdated();
+			
+		}
+		
+		public void movePJ(int who, char D) {
+			
+			switch (who) {
+			case 1:
+				
+				player1.setPlayerHere(true);
+				player1.setPlayerDir(D);
+				
+				break;
+			
+			case 2:
+			
+				player2.setPlayerHere(true);
+				player2.setPlayerDir(D);
+			
+		}
+				
+			
+		}
+		
+		public void removePJ(int who) {
+			
+			switch (who) {
+			case 1:
+				
+				player1.setPlayerHere(false);
+				
+				break;
+			
+			case 2:
+			
+				player2.setPlayerHere(false);
+			
+		}
+			
+		}
+		
+		public void updatePlayerStatus(int who, boolean tf) {
+			
+			switch (who) {
+			case 1:
+				
+				player1.setJustUpdated(tf);
+				
+				break;
+			
+			case 2:
+			
+				player2.setJustUpdated(tf);
+			
+			}
+			
+		}
+		
+		public boolean isPJ1CarryFlagPJ2() {
+			
+			return player1.isCarryFlagPJ2();
+			
+		}
+		
+		public boolean isPJ2CarryFlagPJ1() {
+			
+			return player2.isCarryFlagPJ2();
+			
+		}
+		
+		public void setPJ1CarryFlagPJ2(boolean carry) {
+			
+			player1.setCarryFlagPJ2(carry);
+			
+		}
+		
+		public void setPJ2CarryFlagPJ1(boolean carry) {
+			
+			player2.setCarryFlagPJ1(carry);
+			
+		}
 			
 			//Creamos getters y setters
 			
@@ -257,8 +409,48 @@ public class GameEngine {
 	public void setPJ2Stunned(boolean stunned) {
 		this.PJ2Stunned = stunned;
 	}
+	
+	public boolean isPJ1JustRespawned() {
+		return PJ1JustRespawned;
+	}
+	public void setPJ1JustRespawned(boolean pJ1JustRespawned) {
+		PJ1JustRespawned = pJ1JustRespawned;
+	}
+	public boolean isPJ2JustRespawned() {
+		return PJ2JustRespawned;
+	}
+	public void setPJ2JustRespawned(boolean pJ2JustRespawned) {
+		PJ2JustRespawned = pJ2JustRespawned;
+	}
+	
+	/*public int getPJ1KilledTurn() {
+		return PJ1KilledTurn;
+	}
+	public void setPJ1KilledTurn(int pJ1KilledTurn) {
+		PJ1KilledTurn = pJ1KilledTurn;
+	}
+	public int getPJ2KilledTurn() {
+		return PJ2KilledTurn;
+	}
+	public void setPJ2KilledTurn(int pJ2KilledTurn) {
+		PJ2KilledTurn = pJ2KilledTurn;
+	}*/
 				
 		//Array bidimensional que será nuestro mapa hecho de casillas
+
+	public boolean isPJ1JustStunned() {
+		return PJ1JustStunned;
+	}
+	public void setPJ1JustStunned(boolean pJ1JustStunned) {
+		PJ1JustStunned = pJ1JustStunned;
+	}
+
+	public boolean isPJ2JustStunned() {
+		return PJ2JustStunned;
+	}
+	public void setPJ2JustStunned(boolean pJ2JustStunned) {
+		PJ2JustStunned = pJ2JustStunned;
+	}
 
 	slot[][] combatMapSlot=new slot[50][50];
 		
@@ -385,7 +577,7 @@ public class GameEngine {
 			
 			if (combatMapSlot[x][y].isBushTF()==false && combatMapSlot[x][y].isTreeTF()==false && combatMapSlot[x][y].isHoleTF()==false && combatMapSlot[x][y].isFlagP1TF()==false) {
 			
-				combatMapSlot[x][y].player1.setPlayerHere(true);
+				combatMapSlot[x][y].movePJ(1, 'P');
 				player1StartingPos=false;
 				
 			}
@@ -397,9 +589,9 @@ public class GameEngine {
 			x=(int)(Math.random() * 50);
 			y=(int)(Math.random() * 50);
 			
-			if (combatMapSlot[x][y].isBushTF()==false && combatMapSlot[x][y].isTreeTF()==false && combatMapSlot[x][y].isHoleTF()==false && combatMapSlot[x][y].isFlagP1TF()==false && combatMapSlot[x][y].player1.isPlayerHere()==false) {
+			if (combatMapSlot[x][y].isBushTF()==false && combatMapSlot[x][y].isTreeTF()==false && combatMapSlot[x][y].isHoleTF()==false && combatMapSlot[x][y].isFlagP1TF()==false && combatMapSlot[x][y].isPJ1Here()==false) {
 			
-				combatMapSlot[x][y].player2.setPlayerHere(true);
+				combatMapSlot[x][y].movePJ(2, 'P');
 				player2StartingPos=false;
 				
 			}
@@ -430,22 +622,22 @@ public class GameEngine {
 					if(combatMapSlot[x][y].isRedZone()==true) {
 						combatMapScreen[x][y]="\033[1;41m   \033[0m";
 					}
-					if(combatMapSlot[x][y].shotPJ1.isBulletHere()==true) {
+					if(combatMapSlot[x][y].isBulletHerePJ1()==true) {
 						combatMapScreen[x][y]="\033[1;47m\033[1;34m + \033[0m";
 					}
-					if(combatMapSlot[x][y].shotPJ2.isBulletHere()==true) {
+					if(combatMapSlot[x][y].isBulletHerePJ2()==true) {
 						combatMapScreen[x][y]="\033[1;47m\033[1;35m + \033[0m";
 					}
-					if(combatMapSlot[x][y].player1.isPlayerHere()==true) {
+					if(combatMapSlot[x][y].isPJ1Here()==true) {
 						combatMapScreen[x][y]="\033[1;44mIA1\033[0m";
 					}
-					if(combatMapSlot[x][y].player2.isPlayerHere()==true) {
+					if(combatMapSlot[x][y].isPJ2Here()==true) {
 						combatMapScreen[x][y]="\033[1;45mIA2\033[0m";
 					}
-					if(combatMapSlot[x][y].player1.isCarryFlagPJ2()==true) {
+					if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
 						combatMapScreen[x][y]="\033[1;44m-2-\033[0m";
 					}
-					if(combatMapSlot[x][y].player2.isCarryFlagPJ1()==true) {
+					if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
 						combatMapScreen[x][y]="\033[1;45m-1-\033[0m";
 					}
 		
@@ -473,398 +665,680 @@ public class GameEngine {
 
 	public void updateShots(int x,int y) throws IllegalArgumentException {
 		
+		if(combatMapSlot[x][y].isTreeTF()==false) {
+		
 		if(combatMapSlot[x][y].isRedZone()==false) {
 		
-		if(combatMapSlot[x][y].shotPJ1.isBulletHere()==true && combatMapSlot[x][y].shotPJ1.isJustUpdated()==false) {
+		if(combatMapSlot[x][y].isBulletHerePJ1()==true && combatMapSlot[x][y].isBulletUpdatedPJ1()==false) {
 			
-			switch (combatMapSlot[x][y].shotPJ1.getBulletDir()) {
+			try {
+			
+				switch (combatMapSlot[x][y].getBulletDirPJ1()) {
 				
-				case 'N':
-					
-					try {
-						
+					case 'N':
+							
 						combatMapSlot[x][y-1].moveBullet(1,'N');
-						combatMapSlot[x][y-1].updateBulletStatus(1, true);
+						combatMapScreen[x][y-1]="\033[1;47m\033[1;34m + \033[0m";
 						combatMapScreen[x][y]="\033[1;47m   \033[0m";
 						combatMapSlot[x][y].removeBullet(1);
 						
-						/*
-						 * 
-						 * combatMapSlot[x][y-1].moveBullet(1,'N');
-						 * 
-						 * removeBullet(x,y,1);
-						 * 
-						 * combatMapScreen[x][y]="\033[1;47m   \033[0m";
-						 * 
-						 * */
-						
-					}
+						break;
 					
-					catch(ArrayIndexOutOfBoundsException e) {
-												
+					case 'S':
+						
+						combatMapSlot[x][y+1].moveBullet(1,'S');
+						combatMapSlot[x][y+1].updateBulletStatus(1, true);
+						combatMapScreen[x][y+1]="\033[1;47m\033[1;34m + \033[0m";
 						combatMapScreen[x][y]="\033[1;47m   \033[0m";
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
+						combatMapSlot[x][y].removeBullet(1);
 						
-					}
+						break;
 					
-					break;
+					case 'E':
+
+						combatMapSlot[x+1][y].moveBullet(1,'E');
+						combatMapSlot[x+1][y].updateBulletStatus(1, true);
+						combatMapScreen[x+1][y]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(1);
 					
-				case 'S':
+						break;
 					
-					try {
+					case 'W':
 						
-						combatMapSlot[x][y+1].shotPJ1.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						combatMapSlot[x][y+1].shotPJ1.setJustUpdated(true);
-						
-					}
+						combatMapSlot[x-1][y].moveBullet(1,'W');
+						combatMapScreen[x-1][y]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(1);
 					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						
-					}
+						break;
 					
-					break;
-					
-				case 'E':
-					
-					try {
-						
-						combatMapSlot[x+1][y].shotPJ1.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						combatMapSlot[x+1][y].shotPJ1.setJustUpdated(true);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						
-					}
-					
-					break;
-					
-				case 'W':
-					
-					try {
-						
-						combatMapSlot[x-1][y].shotPJ1.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-						
-					}
-					
-					break;
-					
-				default:
+					default:
 						
 					throw new IllegalArgumentException(String.format("HUGE ERROR happened on method updateShots(int x, int y)."+
-					"\nPossibly a non acceptable CHAR was inputed on the bullet direction of shotPJ1: "+combatMapSlot[x][y].shotPJ1.getBulletDir()));
+					"\nPossibly a non acceptable CHAR was inputed on the bullet direction of shotPJ1: "+combatMapSlot[x][y].getBulletDirPJ1()));
+				}
+			}
+					
+			catch(ArrayIndexOutOfBoundsException e) {
+						
+				combatMapSlot[x][y].removeBullet(1);
+						
+			}
 					
 			}
 			
-		}
 			
-		if(combatMapSlot[x][y].shotPJ1.isBulletHere()==true && combatMapSlot[x][y].shotPJ1.isJustUpdated()==true) {
+		if(combatMapSlot[x][y].isBulletHerePJ1()==true && combatMapSlot[x][y].isBulletUpdatedPJ1()==true) {
 			
 			combatMapSlot[x][y].updateBulletStatus(1, false);
 		}
 		
-		if(combatMapSlot[x][y].shotPJ2.isBulletHere()==true && combatMapSlot[x][y].shotPJ2.isJustUpdated()==false) {
+		//PJ2*********
+		
+		if(combatMapSlot[x][y].isBulletHerePJ2()==true && combatMapSlot[x][y].isBulletUpdatedPJ2()==false) {
 			
-			switch (combatMapSlot[x][y].shotPJ2.getBulletDir()) {
+			try {
+			
+				switch (combatMapSlot[x][y].getBulletDirPJ2()) {
 				
-				case 'N':
-					
-					try {
+					case 'N':
+							
+						combatMapSlot[x][y-1].moveBullet(2,'N');
+						combatMapScreen[x][y-1]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(2);
 						
-						combatMapSlot[x][y-1].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
+						break;
+					
+					case 'S':
 						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
+						combatMapSlot[x][y+1].moveBullet(2,'S');
+						combatMapSlot[x][y+1].updateBulletStatus(2, true);
+						combatMapScreen[x][y+1]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(2);
 						
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
+						break;
+					
+					case 'E':
+
+						combatMapSlot[x+1][y].moveBullet(2,'E');
+						combatMapSlot[x+1][y].updateBulletStatus(2, true);
+						combatMapScreen[x+1][y]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(2);
+					
+						break;
+					
+					case 'W':
 						
-					}
+						combatMapSlot[x-1][y].moveBullet(2,'W');
+						combatMapScreen[x-1][y]="\033[1;47m\033[1;34m + \033[0m";
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removeBullet(2);
 					
-					break;
+						break;
 					
-				case 'S':
-					
-					try {
+					default:
 						
-						combatMapSlot[x][y+1].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						combatMapSlot[x][y+1].shotPJ2.setJustUpdated(true);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						
-					}
-					
-					break;
-					
-				case 'E':
-					
-					try {
-						
-						combatMapSlot[x+1][y].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						combatMapSlot[x+1][y].shotPJ2.setJustUpdated(true);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						
-					}
-					
-					break;
-					
-				case 'W':
-					
-					try {
-						
-						combatMapSlot[x-1][y].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-						
-					}
-					
-					break;
-					
-				default:
-					
 					throw new IllegalArgumentException(String.format("HUGE ERROR happened on method updateShots(int x, int y)."+
-					"\nPossibly a non acceptable CHAR was inputed on the bullet direction of shotPJ2"));
+					"\nPossibly a non acceptable CHAR was inputed on the bullet direction of shotPJ2: "+combatMapSlot[x][y].getBulletDirPJ2()));
+				}
+			}
+					
+			catch(ArrayIndexOutOfBoundsException e) {
+						
+				combatMapSlot[x][y].removeBullet(2);
+						
+			}
 					
 			}
-		}
-			
-		if(combatMapSlot[x][y].shotPJ2.isBulletHere()==true && combatMapSlot[x][y].shotPJ2.isJustUpdated()==true) {
-			
-			combatMapSlot[x][y].shotPJ2.setJustUpdated(false);
+		
 		}
 		}
 		
-		if(combatMapSlot[x][y].isRedZone()==true) {
+		if(combatMapSlot[x][y].isBulletHerePJ2()==true && combatMapSlot[x][y].isBulletUpdatedPJ2()==true) {
 			
-			combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-			combatMapSlot[x][y].shotPJ1.setJustUpdated(false);
-			combatMapSlot[x][y].shotPJ2.setBulletHere(false);
-			combatMapSlot[x][y].shotPJ2.setJustUpdated(false);
+			combatMapSlot[x][y].updateBulletStatus(2, false);
+		}
+		
+		if(combatMapSlot[x][y].isTreeTF()==true && (combatMapSlot[x][y].isBulletHerePJ2()==true || combatMapSlot[x][y].isBulletHerePJ1()==true)) {
+			
+			combatMapSlot[x][y].removeBullet(1);
+			combatMapSlot[x][y].updateBulletStatus(1, false);
+			combatMapSlot[x][y].removeBullet(2);
+			combatMapSlot[x][y].updateBulletStatus(2, false);
+			
+		}
+		
+		if(combatMapSlot[x][y].isRedZone()==true && (combatMapSlot[x][y].isBulletHerePJ2()==true || combatMapSlot[x][y].isBulletHerePJ1()==true)) {
+			
+			combatMapSlot[x][y].removeBullet(1);
+			combatMapSlot[x][y].updateBulletStatus(1, false);
+			combatMapSlot[x][y].removeBullet(2);
+			combatMapSlot[x][y].updateBulletStatus(2, false);
 			
 		}
 			
 	}
 	
-	public void updateMovements(int x,int y) {
-		/*gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg*/
-		if(combatMapSlot[x][y].player1.isPlayerHere()==true && combatMapSlot[x][y].player1.isJustUpdated()==false) {
+	public void respawnPlayer(int who, int x, int y) {
+		
+		switch(who) {
+		
+		case 1:
 			
-			switch (combatMapSlot[x][y].player1.getPlayerDir()) {
+			player1StartingPos=true;
+			
+			while(player1StartingPos) {
 				
-				case 'N':
-					
-					try {
+				int respawnx=(int)(Math.random() * 50);
+				int respawny=(int)(Math.random() * 50);
+				
+				if(!(respawnx==x) || !(respawny==y)) {
+				
+				if (combatMapSlot[respawnx][respawny].isBushTF()==false && combatMapSlot[respawnx][respawny].isTreeTF()==false && combatMapSlot[respawnx][respawny].isHoleTF()==false && combatMapSlot[respawnx][respawny].isFlagP1TF()==false && combatMapSlot[respawnx][respawny].isPJ2Here()==false) {
+				
+					combatMapSlot[respawnx][respawny].movePJ(1, 'P');
+					setPJ1Stunned(true);
+					setPJ1JustRespawned(true);
+					combatMapScreen[respawnx][respawny]="\033[1;47m\033[1;34mIA1\033[0m";
+					if(respawnx<=x && respawny<=y){
 						
-						combatMapSlot[x][y-1].player1.setPlayerHere(true);
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					break;
-					
-				case 'S':
-					
-					try {
-						
-						combatMapSlot[x][y+1].player1.setPlayerHere(true);
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						combatMapSlot[x][y+1].player1.setPlayerHere(true);
+						setPJ1JustRespawned(false);
 						
 					}
+					player1StartingPos=false;
 					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					break;
-					
-				case 'E':
-					
-					try {
-						
-						combatMapSlot[x+1][y].player1.setPlayerHere(true);
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						combatMapSlot[x+1][y].player1.setPlayerHere(true);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					break;
-					
-				case 'W':
-					
-					try {
-						
-						combatMapSlot[x-1][y].player1.setPlayerHere(true);
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
-						
-						combatMapSlot[x][y].player1.setPlayerHere(false);
-						
-					}
-					
-					break;
-					
-				case 'Q':
-					
-					combatMapSlot[x][y].player1.setPlayerHere(true);
-					
-					break;
-					
-				default:
-						
-					combatMapSlot[x][y].player1.setPlayerHere(true);
-					//print???
-					
+				}
+				}
+				
 			}
 			
-		}
+			break;
+		
+		case 2:
+		
+			player2StartingPos=true;
+		
+			while(player2StartingPos) {
 			
-		if(combatMapSlot[x][y].player1.isPlayerHere()==true && combatMapSlot[x][y].player2.isJustUpdated()==true) {
+				int respawnx=(int)(Math.random() * 50);
+				int respawny=(int)(Math.random() * 50);
 			
-			combatMapSlot[x][y].player1.setJustUpdated(false);
+				if(!(respawnx==x) || !(respawny==y)) {
+			
+					if (combatMapSlot[respawnx][respawny].isBushTF()==false && combatMapSlot[respawnx][respawny].isTreeTF()==false && combatMapSlot[respawnx][respawny].isHoleTF()==false && combatMapSlot[respawnx][respawny].isFlagP1TF()==false && combatMapSlot[respawnx][respawny].isPJ1Here()==false) {
+			
+						combatMapSlot[respawnx][respawny].movePJ(2, 'P');
+						setPJ2Stunned(true);
+						setPJ2JustRespawned(true);
+						combatMapScreen[respawnx][respawny]="\033[1;47m\033[1;35mIA2\033[0m";
+						if(respawnx<=x && respawny<=y){
+							
+							setPJ2JustRespawned(false);
+							
+						}
+						player2StartingPos=false;
+				
+					}
+				}
+			
+			}
+		
+			break;
+	
 		}
 		
-		if(combatMapSlot[x][y].player2.isPlayerHere()==true && combatMapSlot[x][y].player2.isJustUpdated()==false) {
+	}
+
+	public void respawnFlag(int who, int x, int y) {
+		
+		switch(who) {
+		
+		case 1:
 			
-			switch (combatMapSlot[x][y].player2.getPlayerDir()) {
+			player1StartingPos=true;
+			
+			while(player1StartingPos) {
 				
-				case 'N':
+				int respawnx=(int)(Math.random() * 50);
+				int respawny=(int)(Math.random() * 50);
+				
+				if(!(respawnx==x) || !(respawny==y)) {
+				
+				if (combatMapSlot[respawnx][respawny].isBushTF()==false && combatMapSlot[respawnx][respawny].isTreeTF()==false && combatMapSlot[respawnx][respawny].isHoleTF()==false && combatMapSlot[respawnx][respawny].isFlagP2TF()==false && combatMapSlot[respawnx][respawny].isPJ1Here()==false && combatMapSlot[respawnx][respawny].isPJ2Here()==false) {
+				
+					combatMapSlot[respawnx][respawny].setFlagP1TF(true);
+					combatMapScreen[respawnx][respawny]="\033[1;47m\033[1;34m-1-\033[0m";
+					player1StartingPos=false;
 					
-					try {
+				}
+				}
+				
+			}
+			
+			break;
+		
+		case 2:
+		
+			player2StartingPos=true;
+		
+			while(player2StartingPos) {
+			
+				int respawnx=(int)(Math.random() * 50);
+				int respawny=(int)(Math.random() * 50);
+				
+				if(!(respawnx==x) || !(respawny==y)) {
+				
+				if (combatMapSlot[respawnx][respawny].isBushTF()==false && combatMapSlot[respawnx][respawny].isTreeTF()==false && combatMapSlot[respawnx][respawny].isHoleTF()==false && combatMapSlot[respawnx][respawny].isFlagP1TF()==false && combatMapSlot[respawnx][respawny].isPJ1Here()==false && combatMapSlot[respawnx][respawny].isPJ2Here()==false) {
+				
+					combatMapSlot[respawnx][respawny].setFlagP2TF(true);
+					combatMapScreen[respawnx][respawny]="\033[1;47m\033[1;35m-2-\033[0m";
+					player1StartingPos=false;
+					
+				}
+				}
+				
+			}
+		
+			break;
+	
+		}
+		
+	}
+	
+	public void updateMovements(int x,int y) {
+		
+		if(combatMapSlot[x][y].isRedZone()==false) {
+			
+			if(combatMapSlot[x][y].isPJ1Here()==true && (combatMapSlot[x][y].isBulletHerePJ2()==true || combatMapSlot[x][y].isHoleTF()==true))  {
+				
+				respawnPlayer(1,x,y);
+				P1Kill++;
+				if(combatMapSlot[x][y].isHoleTF()==true && combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+					
+					respawnFlag(1,x,y);
+					combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
+					
+				}
+				if(combatMapSlot[x][y].isBulletHerePJ2()==true && combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+					
+					combatMapSlot[x][y].setFlagP2TF(true);
+					combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
+					
+				}
+				
+			}
+			
+			if(combatMapSlot[x][y].isPJ2Here()==true && (combatMapSlot[x][y].isBulletHerePJ1()==true || combatMapSlot[x][y].isHoleTF()==true))  {
+				
+				respawnPlayer(2,x,y);
+				P2Kill++;
+				if(combatMapSlot[x][y].isHoleTF()==true && combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
+					
+					respawnFlag(2,x,y);
+					combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
+					
+				}
+				if(combatMapSlot[x][y].isBulletHerePJ1()==true && combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
+					
+					combatMapSlot[x][y].setFlagP1TF(true);
+					combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
+					
+				}
+				
+			}
+			
+			if(combatMapSlot[x][y].isPJ1Here() && combatMapSlot[x][y].isFlagP2TF()==true) {
+				
+				combatMapSlot[x][y].setPJ1CarryFlagPJ2(true);
+				combatMapSlot[x][y].setFlagP2TF(false);
+				
+			}
+		
+		if(combatMapSlot[x][y].isPJ1Here()==true && combatMapSlot[x][y].isPJ1Updated()==false && combatMapSlot[x][y].isBulletHerePJ2()==false && isPJ1Stunned()==false) {
+			
+			try {
+			
+				switch (combatMapSlot[x][y].getPJ1Dir()) {
+				
+					case 'N':
+							
+						if(combatMapSlot[x][y-1].isTreeTF()==true || combatMapSlot[x][y-1].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+							setPJ1JustStunned(true);
+							setPJ1Stunned(true);
+							
+						}
+						else {
+							combatMapSlot[x][y-1].movePJ(1,'N');
+							if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+								
+								combatMapScreen[x][y-1]="\033[1;44m-2-\033[0m";
+								combatMapSlot[x][y-1].setPJ1CarryFlagPJ2(true);
+								
+							}
+							else {
+								
+							combatMapScreen[x][y-1]="\033[1;47m\033[1;34mIA1\033[0m";
+							
+							}
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(1);
+						}
 						
-						combatMapSlot[x][y-1].player2.setPlayerHere(true);
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+						break;
+					
+					case 'S':
 						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
+						if(combatMapSlot[x][y+1].isTreeTF()==true || combatMapSlot[x][y+1].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+							setPJ1JustStunned(true);
+							setPJ1Stunned(true);
+							
+						}
 						
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+						else {
+							combatMapSlot[x][y+1].movePJ(1,'S');
+							combatMapSlot[x][y+1].updatePlayerStatus(1, true);
+							if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+								
+								combatMapScreen[x][y+1]="\033[1;44m-2-\033[0m";
+								combatMapSlot[x][y+1].setPJ1CarryFlagPJ2(true);
+								
+							}
+							else {
+								
+							combatMapScreen[x][y+1]="\033[1;47m\033[1;34mIA1\033[0m";
+							
+							}
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(1);
 						
-					}
-					
-					break;
-					
-				case 'S':
-					
-					try {
+						}
 						
-						combatMapSlot[x][y+1].player2.setPlayerHere(true);
-						combatMapSlot[x][y].player2.setPlayerHere(false);
-						combatMapSlot[x][y+1].player2.setJustUpdated(true);
+						break;
+					
+					case 'E':
+
+						if(combatMapSlot[x+1][y].isTreeTF()==true || combatMapSlot[x+1][y].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+							setPJ1JustStunned(true);
+							setPJ1Stunned(true);
+							
+						}
 						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
+						else {
 						
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+							combatMapSlot[x+1][y].movePJ(1,'E');
+							combatMapSlot[x+1][y].updatePlayerStatus(1, true);
+							if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+								
+								combatMapScreen[x+1][y]="\033[1;44m-2-\033[0m";
+								combatMapSlot[x+1][y].setPJ1CarryFlagPJ2(true);
+								
+							}
+							else {
+								
+							combatMapScreen[x+1][y]="\033[1;47m\033[1;34mIA1\033[0m";
+							
+							}
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(1);
 						
-					}
+						}
 					
-					break;
+						break;
 					
-				case 'E':
-					
-					try {
+					case 'W':
 						
-						combatMapSlot[x+1][y].player2.setPlayerHere(true);
-						combatMapSlot[x][y].player2.setPlayerHere(false);
-						combatMapSlot[x+1][y].player2.setJustUpdated(true);
+						if(combatMapSlot[x-1][y].isTreeTF()==true || combatMapSlot[x-1][y].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+							setPJ1JustStunned(true);
+							setPJ1Stunned(true);
+							
+						}
 						
-					}
-					
-					catch(ArrayIndexOutOfBoundsException e) {
+						else {
 						
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+							combatMapSlot[x-1][y].movePJ(1,'W');
+							if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+								
+								combatMapScreen[x-1][y]="\033[1;44m-2-\033[0m";
+								combatMapSlot[x-1][y].setPJ1CarryFlagPJ2(true);
+								
+							}
+							else {
+								
+							combatMapScreen[x-1][y]="\033[1;47m\033[1;34mIA1\033[0m";
+							
+							}
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(1);
 						
-					}
+						}
 					
-					break;
-					
-				case 'W':
-					
-					try {
+						break;
 						
-						combatMapSlot[x-1][y].player2.setPlayerHere(true);
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+					case 'P':
 						
-					}
+							combatMapSlot[x][y].movePJ(1,'P');
+							if(combatMapSlot[x][y].isPJ1CarryFlagPJ2()==true) {
+								
+								combatMapScreen[x][y]="\033[1;44m-2-\033[0m";
+								combatMapSlot[x][y].setPJ1CarryFlagPJ2(true);
+								
+							}
+							else {
+								
+							combatMapScreen[x][y-1]="\033[1;47m\033[1;34mIA1\033[0m";
+							
+							}
 					
-					catch(ArrayIndexOutOfBoundsException e) {
+						break;
+					
+					default:
 						
-						combatMapSlot[x][y].player2.setPlayerHere(false);
+						combatMapSlot[x][y].movePJ(1,'P');
+						combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
 						
-					}
-					
-					break;
-					
-				case 'Q':
-					
-					combatMapSlot[x][y].player2.setPlayerHere(true);
-					
-					break;
-					
-				default:
-						
-					combatMapSlot[x][y].player2.setPlayerHere(true);
-					//print???
-					
+				}
 			}
 					
+			catch(ArrayIndexOutOfBoundsException e) {
+						
+				combatMapSlot[x][y].movePJ(1,'P');
+				combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+						
+			}
+					
+			}
+			
+		if(combatMapSlot[x][y].isPJ1Here()==true && combatMapSlot[x][y].isPJ1Updated()==true) {
+			
+			combatMapSlot[x][y].updatePlayerStatus(1, false);
 		}
+		
+		if(combatMapSlot[x][y].isPJ1Here()==true && isPJ1Stunned()==true) {
 			
-		if(combatMapSlot[x][y].player2.isPlayerHere()==true && combatMapSlot[x][y].player2.isJustUpdated()==true) {
+			if(isPJ1JustRespawned()==true){
+				
+				setPJ1JustRespawned(false);
+				
+				}
+				
 			
-			combatMapSlot[x][y].player2.setJustUpdated(false);
+			else {
+				
+				if(isPJ1JustStunned()==true) {
+					
+					setPJ1JustStunned(false);
+					
+				}
+				
+				else {
+				
+					setPJ1Stunned(false);
+				
+				}
+				
+			}
+			
 		}
+		
+		//PJ2***********************************************************************************************************************
+		
+		if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==false && combatMapSlot[x][y].isBulletHerePJ1()==false && isPJ2Stunned()==false) {
 			
+			try {
+			
+				switch (combatMapSlot[x][y].getPJ2Dir()) {
+				
+					case 'N':
+							
+						if(combatMapSlot[x][y-1].isTreeTF()==true || combatMapSlot[x][y-1].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
+							setPJ2JustStunned(true);
+							setPJ2Stunned(true);
+							
+						}
+						else {
+							combatMapSlot[x][y-1].movePJ(2,'N');
+							combatMapScreen[x][y-1]="\033[1;47m\033[1;35mIA2\033[0m";
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(2);
+						}
+						
+						break;
+					
+					case 'S':
+						
+						if(combatMapSlot[x][y+1].isTreeTF()==true || combatMapSlot[x][y+1].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
+							setPJ2JustStunned(true);
+							setPJ2Stunned(true);
+							
+						}
+						
+						else {
+							combatMapSlot[x][y+1].movePJ(2,'S');
+							combatMapSlot[x][y+1].updatePlayerStatus(2, true);
+							combatMapScreen[x][y+1]="\033[1;47m\033[1;35mIA2\033[0m";
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(2);
+						
+						}
+						
+						break;
+					
+					case 'E':
+
+						if(combatMapSlot[x+1][y].isTreeTF()==true || combatMapSlot[x+1][y].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
+							setPJ2JustStunned(true);
+							setPJ2Stunned(true);
+							
+						}
+						
+						else {
+						
+							combatMapSlot[x+1][y].movePJ(2,'E');
+							combatMapSlot[x+1][y].updatePlayerStatus(2, true);
+							combatMapScreen[x+1][y]="\033[1;47m\033[1;35mIA2\033[0m";
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(2);
+						
+						}
+					
+						break;
+					
+					case 'W':
+						
+						if(combatMapSlot[x-1][y].isTreeTF()==true || combatMapSlot[x-1][y].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+							
+							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
+							setPJ2JustStunned(true);
+							setPJ2Stunned(true);
+							
+						}
+						
+						else {
+						
+							combatMapSlot[x-1][y].movePJ(2,'W');
+							combatMapScreen[x-1][y]="\033[1;47m\033[1;35mIA2\033[0m";
+							combatMapScreen[x][y]="\033[1;47m   \033[0m";
+							combatMapSlot[x][y].removePJ(2);
+						
+						}
+					
+						break;
+						
+					case 'P':
+						
+							combatMapSlot[x][y].movePJ(2,'P');
+							combatMapScreen[x][y]="\033[1;47m\033[1;35mIA2\033[0m";
+					
+						break;
+					
+					default:
+						
+						combatMapSlot[x][y].movePJ(2,'P');
+						combatMapScreen[x][y]="\033[1;47m\033[1;35m???\033[0m";
+						
+				}
+			}
+					
+			catch(ArrayIndexOutOfBoundsException e) {
+						
+				combatMapSlot[x][y].movePJ(2,'P');
+				combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
+						
+			}
+					
+			}
+			
+		if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==true) {
+			
+			combatMapSlot[x][y].updatePlayerStatus(2, false);
+		}
+		
+		if(combatMapSlot[x][y].isPJ2Here()==true && isPJ2Stunned()==true) {
+			
+			if(isPJ2JustRespawned()==true){
+				
+				setPJ2JustRespawned(false);
+				
+				}
+				
+			
+			else {
+				
+				if(isPJ2JustStunned()==true) {
+					
+					setPJ2JustStunned(false);
+					
+				}
+				
+				else {
+				
+					setPJ2Stunned(false);
+				
+				}
+				
+			}
+			
+		}
+		}
+		
 	}
 	
 	public void updateMap() {
@@ -885,26 +1359,32 @@ public class GameEngine {
 				if(x==49) {
 					System.out.print("\n");
 				}
-				if(combatMapSlot[x][y].isFlagP1TF()==true && combatMapSlot[x][y].isRedZone()==true) {
+			}
+		}
+		for(int r=0;r<50;r++) {
+			for(int j=0;j<50;j++) {
+				
+			
+				if(combatMapSlot[j][r].isFlagP1TF()==true && combatMapSlot[j][r].isRedZone()==true) {
 					gameEnded=true;
 				}
-				if(combatMapSlot[x][y].isFlagP2TF()==true && combatMapSlot[x][y].isRedZone()==true) {
+				if(combatMapSlot[j][r].isFlagP2TF()==true && combatMapSlot[j][r].isRedZone()==true) {
 					gameEnded=true;
 				}
-				if(combatMapSlot[x][y].player1.isCarryFlagPJ2()==true && combatMapSlot[x][y].isFlagP1TF()==true) {
+				if(combatMapSlot[j][r].isPJ1CarryFlagPJ2()==true && combatMapSlot[j][r].isFlagP1TF()==true) {
 					winner=BOT1Name;
 					gameEnded=true;
 				}
-				if(combatMapSlot[x][y].player2.isCarryFlagPJ1()==true && combatMapSlot[x][y].isFlagP2TF()==true) {
+				if(combatMapSlot[j][r].isPJ2CarryFlagPJ1()==true && combatMapSlot[j][r].isFlagP2TF()==true) {
 					winner=BOT2Name;
 					gameEnded=true;
 				}
-				if(combatMapSlot[x][y].player1.isPlayerHere()==true && combatMapSlot[x][y].isRedZone()==true) {
-					
+				if(combatMapSlot[j][r].isPJ1Here()==true && combatMapSlot[j][r].isRedZone()==true) {
+			
 					PJ1Red=true;
-					
+			
 				}
-				if(combatMapSlot[x][y].player2.isPlayerHere()==true && combatMapSlot[x][y].isRedZone()==true) {
+				if(combatMapSlot[j][r].isPJ2Here()==true && combatMapSlot[j][r].isRedZone()==true) {
 					
 					PJ2Red=true;
 					
@@ -928,6 +1408,7 @@ public class GameEngine {
 		if(gameEnded==true) {
 			System.out.println(winner+" WON!");
 		}
+		
 	}
 
 	public void actionPlayers(char m, char n) {
@@ -935,93 +1416,87 @@ public class GameEngine {
 		for(int y=0;y<50;y++) {
 			for(int x=0;x<50;x++) {
 		
-				if(combatMapSlot[x][y].player1.isPlayerHere()==true) {
+				if(combatMapSlot[x][y].isPJ1Here()==true && isPJ1Stunned()==false) {
 		
 					switch(m) {
 		
 					case '8':
 						
 						combatMapSlot[x][y-1].moveBullet(1,'N');
-						combatMapSlot[x][y-1].updateBulletStatus(1, true);
+						combatMapSlot[x][y-1].updateBulletStatus(1, false);
 			
 						break;
 			
 					case '2':
 			
-						combatMapSlot[x][y+1].shotPJ1.setBulletHere(true);
-						combatMapSlot[x][y+1].shotPJ1.setBulletDir('S');
-						combatMapSlot[x][y+1].shotPJ1.setJustUpdated(true);
+						combatMapSlot[x][y+1].moveBullet(1,'S');
+						combatMapSlot[x][y+1].updateBulletStatus(1, true);
 			
 						break;
 			
 					case '6':
 			
-						combatMapSlot[x+1][y].shotPJ1.setBulletHere(true);
-						combatMapSlot[x+1][y].shotPJ1.setBulletDir('E');
-						combatMapSlot[x+1][y].shotPJ1.setJustUpdated(true);
+						combatMapSlot[x+1][y].moveBullet(1,'E');
+						combatMapSlot[x+1][y].updateBulletStatus(1, true);
 			
 						break;
 			
 					case '4':
 			
-						combatMapSlot[x-1][y].shotPJ1.setBulletHere(true);
-						combatMapSlot[x-1][y].shotPJ1.setBulletDir('W');
-						combatMapSlot[x-1][y].shotPJ1.setJustUpdated(true);
+						combatMapSlot[x-1][y].moveBullet(1,'W');
+						combatMapSlot[x-1][y].updateBulletStatus(1, false);
 			
 						break;
 			
 					default:
 			
-						combatMapSlot[x][y].player1.setPlayerDir(m);
+						combatMapSlot[x][y].movePJ(1, m);
 			
 						;
 					}	
 				}
-				if(combatMapSlot[x][y].player2.isPlayerHere()==true) {
+				if(combatMapSlot[x][y].isPJ2Here()==true && isPJ2Stunned()==false) {
 					
 					switch(n) {
 		
 					case '8':
 			
-						combatMapSlot[x][y-1].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y-1].shotPJ2.setBulletDir('N');
-						combatMapSlot[x][y-1].shotPJ2.setJustUpdated(true);
+						combatMapSlot[x][y-1].moveBullet(2,'N');
+						combatMapSlot[x][y-1].updateBulletStatus(2, false);
 			
 						break;
 			
 					case '2':
 			
-						combatMapSlot[x][y+1].shotPJ2.setBulletHere(true);
-						combatMapSlot[x][y+1].shotPJ2.setBulletDir('S');
-						combatMapSlot[x][y+1].shotPJ2.setJustUpdated(true);
+						combatMapSlot[x][y+1].moveBullet(2,'S');
+						combatMapSlot[x][y+1].updateBulletStatus(2, true);
 			
 						break;
 			
 					case '6':
 			
-						combatMapSlot[x+1][y].shotPJ2.setBulletHere(true);
-						combatMapSlot[x+1][y].shotPJ2.setBulletDir('E');
-						combatMapSlot[x+1][y].shotPJ2.setJustUpdated(true);
+						combatMapSlot[x+1][y].moveBullet(2,'E');
+						combatMapSlot[x+1][y].updateBulletStatus(2, true);
 			
 						break;
 			
 					case '4':
 			
-						combatMapSlot[x-1][y].shotPJ2.setBulletHere(true);
-						combatMapSlot[x-1][y].shotPJ2.setBulletDir('W');
-						combatMapSlot[x-1][y].shotPJ2.setJustUpdated(true);
+						combatMapSlot[x-1][y].moveBullet(2,'W');
+						combatMapSlot[x-1][y].updateBulletStatus(2, false);
 			
 						break;
 			
 					default:
 			
-						combatMapSlot[x][y].player2.setPlayerDir(n);
+						combatMapSlot[x][y].movePJ(2, n);;
 			
 						;
 					}
 				}
 			}
-	}
+		}
+		turn++;
 		
 	}
 	
@@ -1031,8 +1506,8 @@ public class GameEngine {
 		combatMapSlot[x][y].setTreeTF(false);
 		combatMapSlot[x][y].setBushTF(false);
 		combatMapSlot[x][y].setHoleTF(false);
-		combatMapSlot[x][y].shotPJ1.setBulletHere(false);
-		combatMapSlot[x][y].shotPJ2.setBulletHere(false);
+		combatMapSlot[x][y].removeBullet(1);;
+		combatMapSlot[x][y].removeBullet(2);;
 		
 	}
 	
