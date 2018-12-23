@@ -3,7 +3,9 @@ package PELEAS;
 /*---------------------------------------------------------------------------Hecho por KRYON------------------------------------------------------------------------------*/
 
 
-/*OJO COLISIONES BALAS TAMBIÉN*/
+/*ARREGLAR LAS IMPRESIONES DE ??? CREANDO UNA VARIABLE CONFUSED
+ * PARA QUE LO PRINTE COLORMAP PORQUE POR ALGUNA EXTRAÑA RAZÓN PARECE SER LA ÚNICA MANERA.ARREGLAR CONTACTO BALA-ENTIDAD. TIENE QUE MATAR CUANDO LA BALA MUEVE Y HAY ENTIDAD
+ * NO SOLO CUANDO LA ENTIDAD MUEVE Y HAY BALA*/
 
 
 //Creamos objeto que generará el mapa
@@ -23,7 +25,8 @@ public class GameEngine {
 	private boolean player1StartingPos=true;
 	private boolean player2StartingPos=true;
 	private String BOT1Name, BOT2Name;
-	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false, PJ1JustRespawned=false, PJ2JustRespawned=false, PJ1JustStunned=false, PJ2JustStunned=false, PJ1Shooted=false, PJ2Shooted=false;
+	private boolean PJ1Red,PJ2Red, PJ1Stunned=false, PJ2Stunned=false, PJ1JustRespawned=false, PJ2JustRespawned=false, PJ1JustStunned=false,
+			PJ2JustStunned=false, PJ1Shooted=false, PJ2Shooted=false, PJ1Confused=false, PJ2Confused=false;
 	
 	//888888888888888888888888888888888888888888888888888888888888888888888888kkkkkkkkk
 	
@@ -325,7 +328,7 @@ public class GameEngine {
 		
 		public boolean isPJ2CarryFlagPJ1() {
 			
-			return player2.isCarryFlagPJ2();
+			return player2.isCarryFlagPJ1();
 			
 		}
 		
@@ -450,6 +453,20 @@ public class GameEngine {
 	}
 	public void setPJ2JustStunned(boolean pJ2JustStunned) {
 		PJ2JustStunned = pJ2JustStunned;
+	}
+
+	public boolean isPJ1Confused() {
+		return PJ1Confused;
+	}
+	public void setPJ1Confused(boolean pJ1Confused) {
+		PJ1Confused = pJ1Confused;
+	}
+
+	public boolean isPJ2Confused() {
+		return PJ2Confused;
+	}
+	public void setPJ2Confused(boolean pJ2Confused) {
+		PJ2Confused = pJ2Confused;
 	}
 
 	slot[][] combatMapSlot=new slot[50][50];
@@ -632,7 +649,13 @@ public class GameEngine {
 						
 						if(isPJ1Stunned()==true) {
 							
-							combatMapScreen[x][y]="\033[1;44m!!!\033[0m";
+								combatMapScreen[x][y]="\033[1;44m!!!\033[0m";
+								
+						}
+							
+						if(isPJ1Confused()==true) {
+							
+								combatMapScreen[x][y]="\033[1;44m???\033[0m";
 							
 						}
 						else {
@@ -643,9 +666,14 @@ public class GameEngine {
 					}
 					if(combatMapSlot[x][y].isPJ2Here()==true) {
 						
-						if(isPJ2Stunned()==true) {
+						if(isPJ2Stunned()==true||isPJ2Confused()==true) {
 							
-							combatMapScreen[x][y]="\033[1;45m!!!\033[0m";
+							if(isPJ2Stunned()==true) {
+								combatMapScreen[x][y]="\033[1;45m!!!\033[0m";
+							}
+							else {
+								combatMapScreen[x][y]="\033[1;45m???\033[0m";
+							}
 							
 						}
 						else {
@@ -764,7 +792,6 @@ public class GameEngine {
 				switch (combatMapSlot[x][y].getBulletDirPJ2()) {
 				
 					case 'N':
-							
 						combatMapSlot[x][y-1].moveBullet(2,'N');
 						combatMapScreen[x][y-1]="\033[1;47m\033[1;34m + \033[0m";
 						combatMapScreen[x][y]="\033[1;47m   \033[0m";
@@ -1003,6 +1030,10 @@ public class GameEngine {
 				
 			}
 			
+			if(isPJ1Confused()==true) {
+				setPJ1Confused(false);
+			}
+			
 			if(combatMapSlot[x][y].isPJ2Here()==true && (combatMapSlot[x][y].isBulletHerePJ1()==true || combatMapSlot[x][y].isHoleTF()==true))  {
 				
 				respawnPlayer(2,x,y);
@@ -1020,6 +1051,10 @@ public class GameEngine {
 					
 				}
 				
+			}
+			
+			if(isPJ2Confused()==true) {
+				setPJ2Confused(false);
 			}
 			
 			if(combatMapSlot[x][y].isPJ1Here() && combatMapSlot[x][y].isFlagP2TF()==true) {
@@ -1050,6 +1085,7 @@ public class GameEngine {
 								
 								combatMapScreen[x][y-1]="\033[1;44m-2-\033[0m";
 								combatMapSlot[x][y-1].setPJ1CarryFlagPJ2(true);
+								combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
 								
 							}
 							else {
@@ -1080,6 +1116,7 @@ public class GameEngine {
 								
 								combatMapScreen[x][y+1]="\033[1;44m-2-\033[0m";
 								combatMapSlot[x][y+1].setPJ1CarryFlagPJ2(true);
+								combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
 								
 							}
 							else {
@@ -1112,6 +1149,7 @@ public class GameEngine {
 								
 								combatMapScreen[x+1][y]="\033[1;44m-2-\033[0m";
 								combatMapSlot[x+1][y].setPJ1CarryFlagPJ2(true);
+								combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
 								
 							}
 							else {
@@ -1143,6 +1181,7 @@ public class GameEngine {
 								
 								combatMapScreen[x-1][y]="\033[1;44m-2-\033[0m";
 								combatMapSlot[x-1][y].setPJ1CarryFlagPJ2(true);
+								combatMapSlot[x][y].setPJ1CarryFlagPJ2(false);
 								
 							}
 							else {
@@ -1176,17 +1215,17 @@ public class GameEngine {
 					
 					default:
 						
-						combatMapSlot[x][y].movePJ(1,'.');
+						setPJ1Confused(true);
 						combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
 						
 				}
 			}
-					
+				
 			catch(ArrayIndexOutOfBoundsException e) {
 						
-				combatMapSlot[x][y].movePJ(1,'.');
 				combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
-						
+				setPJ1Confused(true);
+				
 			}
 					
 			}
@@ -1225,150 +1264,210 @@ public class GameEngine {
 		
 		//PJ2***********************************************************************************************************************
 		
-		if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==false && combatMapSlot[x][y].isBulletHerePJ1()==false && isPJ2Stunned()==false) {
+		if(combatMapSlot[x][y].isPJ2Here() && combatMapSlot[x][y].isFlagP1TF()==true) {
 			
-			try {
+			combatMapSlot[x][y].setPJ2CarryFlagPJ1(true);
+			combatMapSlot[x][y].setFlagP1TF(false);
 			
-				switch (combatMapSlot[x][y].getPJ2Dir()) {
+		}
+	
+	if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==false && combatMapSlot[x][y].isBulletHerePJ1()==false && isPJ2Stunned()==false) {
+		
+		try {
+		
+			switch (combatMapSlot[x][y].getPJ2Dir()) {
+			
+				case 'N':
+						
+					if(combatMapSlot[x][y-1].isTreeTF()==true || combatMapSlot[x][y-1].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+						
+						//combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+						setPJ2JustStunned(true);
+						setPJ2Stunned(true);
+						
+					}
+					else {
+						combatMapSlot[x][y-1].movePJ(2,'N');
+						if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
+							
+							//combatMapScreen[x][y-1]="\033[1;44m-2-\033[0m";
+							combatMapSlot[x][y-1].setPJ2CarryFlagPJ1(true);
+							combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
+							
+						}
+						else {
+							
+						//combatMapScreen[x][y-1]="\033[1;47m\033[1;34mIA1\033[0m";
+						
+						}
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removePJ(2);
+					}
+					
+					break;
 				
-					case 'N':
+				case 'S':
+					
+					if(combatMapSlot[x][y+1].isTreeTF()==true || combatMapSlot[x][y+1].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+						
+						//combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+						setPJ2JustStunned(true);
+						setPJ2Stunned(true);
+						
+					}
+					
+					else {
+						combatMapSlot[x][y+1].movePJ(2,'S');
+						combatMapSlot[x][y+1].updatePlayerStatus(2, true);
+						if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
 							
-						if(combatMapSlot[x][y-1].isTreeTF()==true || combatMapSlot[x][y-1].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
-							
-							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
-							setPJ2JustStunned(true);
-							setPJ2Stunned(true);
+							//combatMapScreen[x][y+1]="\033[1;44m-2-\033[0m";
+							combatMapSlot[x][y+1].setPJ2CarryFlagPJ1(true);
+							combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
 							
 						}
 						else {
-							combatMapSlot[x][y-1].movePJ(2,'N');
-							combatMapScreen[x][y-1]="\033[1;47m\033[1;35mIA2\033[0m";
-							combatMapScreen[x][y]="\033[1;47m   \033[0m";
-							combatMapSlot[x][y].removePJ(2);
-						}
-						
-						break;
-					
-					case 'S':
-						
-						if(combatMapSlot[x][y+1].isTreeTF()==true || combatMapSlot[x][y+1].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
 							
-							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
-							setPJ2JustStunned(true);
-							setPJ2Stunned(true);
-							
-						}
-						
-						else {
-							combatMapSlot[x][y+1].movePJ(2,'S');
-							combatMapSlot[x][y+1].updatePlayerStatus(2, true);
-							combatMapScreen[x][y+1]="\033[1;47m\033[1;35mIA2\033[0m";
-							combatMapScreen[x][y]="\033[1;47m   \033[0m";
-							combatMapSlot[x][y].removePJ(2);
+						//combatMapScreen[x][y+1]="\033[1;47m\033[1;34mIA1\033[0m";
 						
 						}
-						
-						break;
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removePJ(2);
 					
-					case 'E':
+					}
+					
+					break;
+				
+				case 'E':
 
-						if(combatMapSlot[x+1][y].isTreeTF()==true || combatMapSlot[x+1][y].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+					if(combatMapSlot[x+1][y].isTreeTF()==true || combatMapSlot[x+1][y].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
+						
+						//combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+						setPJ2JustStunned(true);
+						setPJ2Stunned(true);
+						
+					}
+					
+					else {
+					
+						combatMapSlot[x+1][y].movePJ(2,'E');
+						combatMapSlot[x+1][y].updatePlayerStatus(2, true);
+						if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
 							
-							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
-							setPJ2JustStunned(true);
-							setPJ2Stunned(true);
+							//combatMapScreen[x+1][y]="\033[1;44m-2-\033[0m";
+							combatMapSlot[x+1][y].setPJ2CarryFlagPJ1(true);
+							combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
 							
 						}
-						
 						else {
-						
-							combatMapSlot[x+1][y].movePJ(2,'E');
-							combatMapSlot[x+1][y].updatePlayerStatus(2, true);
-							combatMapScreen[x+1][y]="\033[1;47m\033[1;35mIA2\033[0m";
-							combatMapScreen[x][y]="\033[1;47m   \033[0m";
-							combatMapSlot[x][y].removePJ(2);
+							
+						//combatMapScreen[x+1][y]="\033[1;47m\033[1;34mIA1\033[0m";
 						
 						}
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removePJ(2);
 					
-						break;
+					}
+				
+					break;
+				
+				case 'W':
 					
-					case 'W':
+					if(combatMapSlot[x-1][y].isTreeTF()==true || combatMapSlot[x-1][y].isBushTF()==true || combatMapSlot[x][y].isPJ2Here()==true) {
 						
-						if(combatMapSlot[x-1][y].isTreeTF()==true || combatMapSlot[x-1][y].isBushTF()==true || combatMapSlot[x][y].isPJ1Here()==true) {
+						//combatMapScreen[x][y]="\033[1;47m\033[1;34m!!!\033[0m";
+						setPJ1JustStunned(true);
+						setPJ1Stunned(true);
+						
+					}
+					
+					else {
+					
+						combatMapSlot[x-1][y].movePJ(2,'W');
+						if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
 							
-							combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
-							setPJ2JustStunned(true);
-							setPJ2Stunned(true);
+							//combatMapScreen[x-1][y]="\033[1;44m-2-\033[0m";
+							combatMapSlot[x-1][y].setPJ2CarryFlagPJ1(true);
+							combatMapSlot[x][y].setPJ2CarryFlagPJ1(false);
 							
 						}
-						
 						else {
-						
-							combatMapSlot[x-1][y].movePJ(2,'W');
-							combatMapScreen[x-1][y]="\033[1;47m\033[1;35mIA2\033[0m";
-							combatMapScreen[x][y]="\033[1;47m   \033[0m";
-							combatMapSlot[x][y].removePJ(2);
+							
+						//combatMapScreen[x-1][y]="\033[1;47m\033[1;34mIA1\033[0m";
 						
 						}
+						combatMapScreen[x][y]="\033[1;47m   \033[0m";
+						combatMapSlot[x][y].removePJ(2);
 					
-						break;
-						
-					case 'P':
-						
-							combatMapSlot[x][y].movePJ(2,'P');
-							combatMapScreen[x][y]="\033[1;47m\033[1;35mIA2\033[0m";
+					}
+				
+					break;
 					
-						break;
+				case 'P':
 					
-					default:
+						combatMapSlot[x][y].movePJ(1,'P');
+						if(combatMapSlot[x][y].isPJ2CarryFlagPJ1()==true) {
+							
+							//combatMapScreen[x][y]="\033[1;44m-2-\033[0m";
+							combatMapSlot[x][y].setPJ2CarryFlagPJ1(true);
+							
+						}
+						else {
+							
+						//combatMapScreen[x][y-1]="\033[1;47m\033[1;34mIA1\033[0m";
 						
-						combatMapSlot[x][y].movePJ(2,'P');
-						combatMapScreen[x][y]="\033[1;47m\033[1;35m???\033[0m";
-						
-				}
+						}
+				
+					break;
+				
+				default:
+					
+					setPJ2Confused(true);
+					//combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
+					
 			}
-					
-			catch(ArrayIndexOutOfBoundsException e) {
-						
-				combatMapSlot[x][y].movePJ(2,'P');
-				combatMapScreen[x][y]="\033[1;47m\033[1;35m!!!\033[0m";
-						
-			}
-					
-			}
+		}
 			
-		if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==true) {
+		catch(ArrayIndexOutOfBoundsException e) {
+					
+			//combatMapScreen[x][y]="\033[1;47m\033[1;34m???\033[0m";
+			setPJ2Confused(true);
 			
-			combatMapSlot[x][y].updatePlayerStatus(2, false);
+		}
+				
 		}
 		
-		if(combatMapSlot[x][y].isPJ2Here()==true && isPJ2Stunned()==true) {
+	if(combatMapSlot[x][y].isPJ2Here()==true && combatMapSlot[x][y].isPJ2Updated()==true) {
+		
+		combatMapSlot[x][y].updatePlayerStatus(2, false);
+	}
+	
+	if(combatMapSlot[x][y].isPJ2Here()==true && isPJ2Stunned()==true) {
+		
+		if(isPJ2JustRespawned()==true){
 			
-			if(isPJ2JustRespawned()==true){
-				
-				setPJ2JustRespawned(false);
-				
-				}
-				
+			setPJ2JustRespawned(false);
 			
-			else {
+			}
+			
+		
+		else {
+			
+			if(isPJ2JustStunned()==true) {
 				
-				if(isPJ2JustStunned()==true) {
-					
-					setPJ2JustStunned(false);
-					
-				}
-				
-				else {
-				
-					setPJ2Stunned(false);
-				
-				}
+				setPJ2JustStunned(false);
 				
 			}
 			
+			else {
+			
+				setPJ2Stunned(false);
+			
+			}
+			
 		}
-		}
+	}
+	}
 		
 	}
 	

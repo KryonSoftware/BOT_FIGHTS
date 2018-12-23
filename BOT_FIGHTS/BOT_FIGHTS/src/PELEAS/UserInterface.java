@@ -66,8 +66,6 @@ public class UserInterface {
 	
 	public void menu() throws InterruptedException {
 		
-		FightMap= new GameEngine(player1SelectionName(),player2SelectionName());
-		
 		System.out.println("\033[H\033[2J");
 		
 		System.out.println("\nWELCOME TO:");
@@ -123,6 +121,7 @@ public class UserInterface {
 		
 		P2Selection=inputIntMinMax(1,4);
 		
+		FightMap= new GameEngine(player1SelectionName(),player2SelectionName());
 		
 	}
 	
@@ -236,7 +235,7 @@ public class UserInterface {
 			menu();
 		
 		FightMap.printMap();
-		
+		turnCounter=0;
 		while(FightMap.isGameEnded()==false) {//////está aquí el problema del loop?**********************************************************
 			
 			

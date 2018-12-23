@@ -10,7 +10,7 @@ public class BOT1 {
 	
 	public char getDecission(GameEngine map) {
 		
-		char decission='W';
+		char decission='1';
 		
 		return decission;
 	}
