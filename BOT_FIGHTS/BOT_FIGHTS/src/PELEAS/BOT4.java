@@ -10,7 +10,7 @@ String name="";
 	
 	public char getDecission(GameEngine map) {
 		
-		char decission='W';
+		char decission='4';
 		
 		return decission;
 	}

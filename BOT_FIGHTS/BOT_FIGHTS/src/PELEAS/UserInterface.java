@@ -1,22 +1,44 @@
 package PELEAS;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-                                                 /*ARREGLAR SELECCIONES DE MENÚ URGENTEMENTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE*/
+/**
+ * Clase que hace de interfaz de usuario y que media entre el GameEngine y los BOTS. Realizado única y exclusivamente utilizando herramientas vistas en clase
+ * @author kryon
+ *
+ */
 public class UserInterface {
 
 	GameEngine FightMap;
-	PList PlayerList;
+	ArrayList<BOT> PlayerList;
 	Scanner input=new Scanner(System.in);
-	int P1Selection;
-	int P2Selection;
-	char P1Dec;
-	char P2Dec;
-	private boolean exit=false;
+	int P1Selection,P2Selection;
+	char P1Dec,P2Dec;
+	private boolean exit=false,retry=true;
 	private String keepPlaying;
-	private boolean retry=true;
 	private int turnCounter=0;
 	
+	/**
+	 * Constructor de la clase. Le pasamos la ArrayList de BOTs. BOT es la superclass, pero una lista puede contener clases hijas, 
+	 * de modo que todo lo que le pasemos serán clases hijas (cada clase de cada participante)
+	 * @param ListaDefinitiva ArrayList de subclases de la superclase "BOT"
+	 * @throws InterruptedException Excepción que es de obligatorio uso cuando se usa la función sleep()
+	 */
+	public UserInterface(ArrayList<BOT> ListaDefinitiva) throws InterruptedException {
+		
+		//Le pasamos la lista a la clase interna de gestión "PList"
+		
+		PlayerList= ListaDefinitiva;
+		
+	}
+	
+	/**
+	 * Método para filtrar los inputs del usuario cuando selecciona qué IAs se van a enfrentar
+	 * @param min Número mínimo a introducir
+	 * @param max Número máximo a introducir
+	 * @return Integer (Elección -valor- aceptable dentro de los marcos fijados)
+	 */
 	public int inputIntMinMax(int min,int max) {
 		boolean aceptable=true;
 		int x=0;
@@ -27,7 +49,7 @@ public class UserInterface {
 					aceptable=false;
 				}
 				else {
-					System.out.println("Introduce an correct selection");
+					System.out.println("Introduce a correct selection");
 					aceptable=true;
 				}
 			}
@@ -39,32 +61,13 @@ public class UserInterface {
 		}
 		return x;
 	}
-	
-	public UserInterface(BOT1 P1,BOT2 P2,BOT3 P3,BOT4 P4) throws InterruptedException {
-		
-		PlayerList= new PList();
-		PlayerList.setPList(P1,P2,P3,P4);
-		
-	}
-	
-	public class PList{
-		
-		BOT1 P1;
-		BOT2 P2;
-		BOT3 P3;
-		BOT4 P4;
-		
-		public void setPList(BOT1 P1,BOT2 P2,BOT3 P3,BOT4 P4) {
-			
-			this.P1=P1;
-			this.P2=P2;
-			this.P3=P3;
-			this.P4=P4;
-			
-		}
-	}
-	
+	/**
+	 * Función que hace de menú donde se muestran las IAs de los jugadores y se seleccionan dos para enfrentarse entre sí
+	 * @throws InterruptedException
+	 */
 	public void menu() throws InterruptedException {
+		
+		//Secuencia de escape que limpia la pantalla
 		
 		System.out.println("\033[H\033[2J");
 		
@@ -98,128 +101,87 @@ public class UserInterface {
 				"                                                                                                                                                                                       \n" + 
 				"\nKryonSoftwares");
 		
+		//Hacemos esperar tres segundos antes de limpiar el título inicial
+		
 		Thread.sleep(3000);
 		
 		System.out.println("\033[H\033[2J");
 		
+		//Procedemos a mostrar la lista completa de jugadores y a dejar al usuario seleccionar al PJ1
 		
+		System.out.println("\n\nChoose the player 1: ");
 		
-		System.out.println("\n\nChoose the player 1: \n\n\n\n[1]"+PlayerList.P1.getName()+"\n"+
-				"\n[2]"+PlayerList.P2.getName()+"\n"+
-				"\n[3]"+PlayerList.P3.getName()+"\n"+
-				"\n[4]"+PlayerList.P4.getName());
+		for(int x=0;x<PlayerList.size();x++) {
+			
+			System.out.println("["+x+"] "+PlayerList.get(x).getName());
+				
+		}
 		
-		P1Selection=inputIntMinMax(1,4);
+		P1Selection=inputIntMinMax(0,(PlayerList.size()-1));
 		
 		
 		System.out.println("\033[H\033[2J");
 		
-		System.out.println("\n\nChoose the player 2: \n\n\n\n[1]"+PlayerList.P1.getName()+"\n"+
-				"\n[2]"+PlayerList.P2.getName()+"\n"+
-				"\n[3]"+PlayerList.P3.getName()+"\n"+
-				"\n[4]"+PlayerList.P4.getName());
+		//Procedemos a mostrar la lista completa de jugadores y a dejar al usuario seleccionar al PJ2
 		
-		P2Selection=inputIntMinMax(1,4);
+		System.out.println("\n\nChoose the player 2: ");
+		
+		for(int x=0;x<PlayerList.size();x++) {
+			
+			System.out.println("["+x+"] "+PlayerList.get(x).getName());
+				
+		}
+		
+		P2Selection=inputIntMinMax(0,(PlayerList.size()-1));
+		
+		//Inicializamos el GameEngine llamado FightMap pasándole los nombres de las dos IAs seleccionadas
 		
 		FightMap= new GameEngine(player1SelectionName(),player2SelectionName());
 		
 	}
-	
+	/**
+	 * Método para extraer el nombre de una IA
+	 * @return P1Name
+	 */
 	public String player1SelectionName() {
 		
 		String P1Name="";
 		
-		switch(P1Selection) {
-		
-		case 1:
-			P1Name=PlayerList.P1.getName();
-			break;
-		case 2:
-			P1Name=PlayerList.P2.getName();
-			break;
-		case 3:
-			P1Name=PlayerList.P3.getName();
-			break;
-		case 4:
-			P1Name=PlayerList.P4.getName();
-			break;
-		default:
-			System.out.println("Huge error happened on MENU method in FIGHT class");
-		}
+		P1Name=PlayerList.get(P1Selection).getName();
 		
 		return P1Name;
 	
 	}
+	/**
+	 * Método para extraer el nombre de una IA
+	 * @return P2Name
+	 */
+	public String player2SelectionName() {
+			
+		String P2Name="";
 		
-		public String player2SelectionName() {
-			
-			String P2Name="";
-			
-			switch(P2Selection) {
-			
-			case 1:
-				P2Name=PlayerList.P1.getName();
-				break;
-			case 2:
-				P2Name=PlayerList.P2.getName();
-				break;
-			case 3:
-				P2Name=PlayerList.P3.getName();
-				break;
-			case 4:
-				P2Name=PlayerList.P4.getName();
-				break;
-			default:
-				System.out.println("Huge error happened on MENU method in FIGHT class");
+		P2Name=PlayerList.get(P2Selection).getName();
 		
-		}
 		
 		return P2Name;
 		
 	}
-	
+	/**
+	 * Método que llama a cada una de las dos IAs que están jugando y les pide que le devuelva un char, que es su próxima acción
+	 * @param takeDecission (es una copia del estado actual de FightMap para que las IAs vean qué está pasando y qué va apasar a continuación)
+	 */
 	public void PlayersDecissions(GameEngine takeDecission) {
 		
-		switch(P1Selection) {
 		
-			case 1:
-				P1Dec=PlayerList.P1.getDecission(takeDecission);
-				break;
-			case 2:
-				P1Dec=PlayerList.P2.getDecission(takeDecission);
-				break;
-			case 3:
-				P1Dec=PlayerList.P3.getDecission(takeDecission);
-				break;
-			case 4:
-				P1Dec=PlayerList.P4.getDecission(takeDecission);
-				break;
-			default:
-				System.out.println("Huge error happened on MENU method in FIGHT class");
+		P1Dec=PlayerList.get(P1Selection).getDecission(takeDecission);
 		
-		}
-		
-		switch(P2Selection) {
-		
-			case 1:
-				P2Dec=PlayerList.P1.getDecission(takeDecission);
-				break;
-			case 2:
-				P2Dec=PlayerList.P2.getDecission(takeDecission);
-				break;
-			case 3:
-				P2Dec=PlayerList.P3.getDecission(takeDecission);
-				break;
-			case 4:
-				P2Dec=PlayerList.P4.getDecission(takeDecission);
-				break;
-			default:
-				System.out.println("Huge error happened on MENU method in FIGHT class");
-		}
-		
+		P2Dec=PlayerList.get(P2Selection).getDecission(takeDecission);
 		
 	}
-	
+	/**
+	 * Método que llama a PlayerDecissions y que después pasa a FightMap las decisiones que PlayerDecissions acaba de escribir en P1Dec y P2Dec
+	 * @param actualStatus
+	 */
 	public void PlayersActions(GameEngine actualStatus) {
 		
 		PlayersDecissions(actualStatus);
@@ -227,24 +189,44 @@ public class UserInterface {
 				FightMap.actionPlayers(P1Dec, P2Dec);
 		
 	}
-	
+	/**
+	 * Método que ejecuta la partida en sí
+	 * @throws InterruptedException
+	 */
 	public void LetsFight() throws InterruptedException {
+		
+		//"Mientras se quiera seguir jugando haz lo siguiente..."
 		
 		while(exit==false) {
 			
 			menu();
 		
-		FightMap.printMap();
-		turnCounter=0;
-		while(FightMap.isGameEnded()==false) {//////está aquí el problema del loop?**********************************************************
+			//Inicializamos el mapa del juego
 			
+		FightMap.printMap();
+		
+		//Ponemos el contador de subturnos (que controla la aparición de las RedZones) a cero
+		
+		turnCounter=0;
+		
+		//"Mientras no se haya acabado la partida haz lo siguiente..."
+		
+		while(FightMap.isGameEnded()==false) {
+			
+			//Que los jugadores transmitan su decisión
 			
 			PlayersActions(FightMap);
+			
+			//Cuando haya pasado un minuto comienza a ir ejecutando la zona roja
+			
 			if(turnCounter>119) {
 				if(turnCounter%10==0) {
 					FightMap.redZone();
 				}
 			}
+			
+			//Proceso que ejecuta cada avance de las balas dando una décima de segundo de espera entre cada movimiento de éstas
+			
 			Thread.sleep(100);
 			FightMap.updateMap();
 			Thread.sleep(100);
@@ -255,9 +237,16 @@ public class UserInterface {
 			FightMap.updateMap();
 			Thread.sleep(100);
 			FightMap.updateMap();
+			
+			//Aumentamos el contador de subturno
+			
 			turnCounter++;
 			
+			//Volvemos a empezar con una nueva decisión de los jugadores (ha pasado medio segundo)
+			
 		}
+		
+		//Menú para decidir si seguimos jugando o salimos del juego
 		
 		System.out.println("\n\nDo you want to fight again? [Y]/[N]");
 		
@@ -265,9 +254,10 @@ public class UserInterface {
 
 			while(retry) {
 				
-				input.next();//COMPRPBAR SI ESTO HA ARREGLADO EL PROBLEMAAAAAA***************************************************
+				input.nextLine();
+				
 					keepPlaying=input.next().toUpperCase();
-					System.out.println(keepPlaying);
+					
 					if(keepPlaying.equals("Y") ){
 							exit=false;
 							retry=false;
@@ -313,6 +303,5 @@ public class UserInterface {
 				}
 			}
 		}
-	
 	
 }
