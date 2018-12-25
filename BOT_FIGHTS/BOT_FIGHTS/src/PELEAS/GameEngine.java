@@ -1,4 +1,4 @@
-package PELEAS;
+//package PELEAS;
 
 
 //Creamos objeto que generará el mapa
